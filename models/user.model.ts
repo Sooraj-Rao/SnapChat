@@ -22,13 +22,9 @@ const userSchema = new mongoose.Schema<IUserDocument>(
     },
     fullName: {
       type: String,
-      default: function (this: IUserDocument) {
-        return this.username;
-      },
     },
     password: {
       type: String,
-      default: "123456",
       required: true,
     },
     email: {

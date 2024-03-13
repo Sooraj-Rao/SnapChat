@@ -1,12 +1,15 @@
 "use client";
-import React from "react";
 import { AuthForm, AuthFormFooter } from "../layout";
-import { useSignUp } from "../hooks/useSignup";
-import { object } from "zod";
+import { Validate, useSignUp } from "../hooks/useSignup";
 
 const Signin = () => {
-  const getInput = (input:object) => {
-    useSignUp(input);
+  const getInput = (input: object) => {
+    const isValid = Validate(input);
+    if (isValid) {
+      return alert(isValid);
+    } else {
+      useSignUp(input);
+    }
   };
   return (
     <>

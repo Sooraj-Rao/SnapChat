@@ -6,8 +6,6 @@ export const GenerateUsername = (email: string) => {
       userName += name[i];
     }
   }
-  userName += new Date().getTime();
-  
   if (userName) {
     return userName;
   } else {

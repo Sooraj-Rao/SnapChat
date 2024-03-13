@@ -1,8 +1,9 @@
 import { ConnectDb } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import { useValidate } from "../validate";
+import { useValidate } from "./validate";
 import { User } from "@/models/user.model";
-import { GenerateUsername } from "../generator";
+import { GenerateUsername } from "./generator";
+import bcrypt from "bcrypt";
 
 ConnectDb();
 export const POST = async (req: NextRequest) => {
@@ -21,14 +22,21 @@ export const POST = async (req: NextRequest) => {
       });
     }
     let username = GenerateUsername(email);
-    
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPass = await bcrypt.hash(password, salt);
+
     const newUser = User.create({
       email: email,
-      password: password,
-      username: username,
+      password: hashPass,
+      username: username + new Date().getTime(),
+      fullName: username,
     });
     (await newUser).save();
-    return NextResponse.json({ error: false, message: 'Registration success!' });
+    return NextResponse.json({
+      error: false,
+      message: "Registration success!",
+    });
   } catch (error) {
     console.log("Signup Error -->", error);
     return NextResponse.json({
